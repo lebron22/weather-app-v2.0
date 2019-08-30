@@ -1,9 +1,19 @@
 import React, { Component } from "react";
+import SearchContainer from "../SearchContainer/SearchContainer";
 
 class AppContainer extends Component {
-  state = {};
+  state = {
+    searchedCity: ""
+  };
+
+  handleSearchBarSubmit = searchedCity => {
+    console.log(searchedCity);
+  };
+
   render() {
-    return <div>works</div>;
+    return (
+      <SearchContainer handleSearchBarSubmit={this.handleSearchBarSubmit} />
+    );
   }
 }
 
