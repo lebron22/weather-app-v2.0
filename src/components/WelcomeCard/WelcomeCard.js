@@ -9,9 +9,9 @@ const WelcomeCard = () => {
     <StyledWelcomeCard>
       <StyledH1>Welcome</StyledH1>
       <StyledParagraph>
-        Fill the form above to check the weather.
+        Fill the form above to check the weather
       </StyledParagraph>
-      <StyledH2> wish you sunny days!</StyledH2>
+      <StyledH2> We wish you sunny days!</StyledH2>
     </StyledWelcomeCard>
   );
 };

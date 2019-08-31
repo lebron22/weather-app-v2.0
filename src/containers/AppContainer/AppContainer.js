@@ -3,22 +3,40 @@ import SearchContainer from "../SearchContainer/SearchContainer";
 import API from "../../utils/helpers/API";
 import WeatherResults from "../../components/WeatherResults/WeatherResults";
 import WelcomeCard from "../../components/WelcomeCard/WelcomeCard";
+import { baseForecastsSet } from "../../utils/constants";
+import { getLocalDate } from "../../utils/helpers/getLocalDate";
 
 class AppContainer extends Component {
   state = {
-    searchedCity: ""
+    searchedCity: "",
+    currentWeather: {
+      loading: true,
+      error: null
+    },
+    forecasts: {
+      forecastsQuantity: baseForecastsSet,
+      loading: true,
+      error: null
+    }
   };
 
   handleSearchBarSubmit = searchedCity => {
     if (searchedCity) {
       this.fetchCurrentWeather(searchedCity);
-      this.setState({
+      this.setState(prevState => ({
         searchedCity,
         currentWeather: {
           loading: true,
           error: null
+        },
+        forecasts: {
+          ...prevState.forecasts,
+          forecastsArray: [],
+          showForecast: false,
+          loading: true,
+          error: null
         }
-      });
+      }));
     } else return;
   };
 
@@ -49,6 +67,50 @@ class AppContainer extends Component {
           }
         }));
       });
+  };
+
+  fetchForecasts = city => {
+    API.getForecast(city)
+      .then(({ list }) => {
+        const forecastsArray = list.map(({ dt, main, weather }) => ({
+          weekday: getLocalDate(dt, { weekday: "short" }),
+          hour: getLocalDate(dt, {
+            hour: "numeric",
+            minute: "numeric"
+          }),
+          temp: main.temp,
+          icon: weather[0].icon
+        }));
+        this.setState({
+          forecasts: {
+            forecastsArray,
+            showForecast: true,
+            forecastsQuantity: baseForecastsSet,
+            error: false,
+            loading: false
+          }
+        });
+      })
+      .catch(err => {
+        this.setState(prevState => ({
+          forecasts: {
+            ...prevState.forecasts,
+            error: err.toString()
+          }
+        }));
+      });
+  };
+
+  handleForecastToggleButton = () => {
+    if (!this.state.forecasts.forecastsArray.length) {
+      this.fetchForecasts(this.state.searchedCity);
+    }
+    this.setState(prevState => ({
+      forecasts: {
+        ...prevState.forecasts,
+        showForecast: !prevState.forecasts.showForecast
+      }
+    }));
   };
 
   render() {
