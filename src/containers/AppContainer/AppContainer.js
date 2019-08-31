@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import SearchContainer from "../SearchContainer/SearchContainer";
 import API from "../../utils/helpers/API";
+import WeatherResults from "../../components/WeatherResults/WeatherResults";
+import WelcomeCard from "../../components/WelcomeCard/WelcomeCard";
 
 class AppContainer extends Component {
   state = {
@@ -50,8 +52,25 @@ class AppContainer extends Component {
   };
 
   render() {
+    const { currentWeather, forecasts, searchedCity } = this.state;
+
+    const renderAppContent = searchedCity ? (
+      <WeatherResults
+        searchedCity={searchedCity}
+        currentWeather={currentWeather}
+        forecasts={forecasts}
+        handleForecastToggleButton={this.handleForecastToggleButton}
+        changeForecastsQuantity={this.changeForecastsQuantity}
+      />
+    ) : (
+      <WelcomeCard />
+    );
+
     return (
-      <SearchContainer handleSearchBarSubmit={this.handleSearchBarSubmit} />
+      <>
+        <SearchContainer handleSearchBarSubmit={this.handleSearchBarSubmit} />
+        {renderAppContent}
+      </>
     );
   }
 }
