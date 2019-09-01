@@ -23,8 +23,14 @@ const StyledWelcomeCard = styled.div`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.transparentWhite};
   padding: 20px;
-  min-height: 70vh;
+  min-height: 50vh;
   border-radius: 4px;
+
+  h1,
+  h2,
+  p {
+    margin: 10px 0;
+  }
 `;
 
 export default WelcomeCard;
