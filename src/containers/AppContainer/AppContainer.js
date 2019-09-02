@@ -113,6 +113,26 @@ class AppContainer extends Component {
     }));
   };
 
+  changeForecastsQuantity = id => {
+    if (id === "subtract") {
+      this.setState(prevState => ({
+        forecasts: {
+          ...prevState.forecasts,
+          forecastsQuantity:
+            prevState.forecasts.forecastsQuantity - baseForecastsSet
+        }
+      }));
+    } else if (id === "add") {
+      this.setState(prevState => ({
+        forecasts: {
+          ...prevState.forecasts,
+          forecastsQuantity:
+            prevState.forecasts.forecastsQuantity + baseForecastsSet
+        }
+      }));
+    } else return;
+  };
+
   render() {
     const { currentWeather, forecasts, searchedCity } = this.state;
 
